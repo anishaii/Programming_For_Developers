@@ -2,7 +2,7 @@ package Question3;
 
 public class PatternSequenceMatcher {
 
-    /**
+    
     
     /**
      * This method calculates how many times the sequence formed by repeating `p2` `t2` times

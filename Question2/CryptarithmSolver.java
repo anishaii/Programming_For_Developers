@@ -4,15 +4,23 @@ import java.util.*;
 
 public class CryptarithmSolver {
 
-    static String[] words = {"STAR", "MOON"};  // Words to sum
-    static String result = "NIGHT";            // Result word
+    // Input words to sum (left side of the equation)
+    static String[] words = {"STAR", "MOON"};
 
+    // Result word (right side of the equation)
+    static String result = "NIGHT";
+
+    // Mapping from character to digit
     static Map<Character, Integer> charToDigit = new HashMap<>();
+
+    // Array to track which digits (0–9) have been used
     static boolean[] usedDigits = new boolean[10];
+
+    // List of all unique letters in the equation
     static List<Character> letters = new ArrayList<>();
 
     public static void main(String[] args) {
-        // Collect unique letters from words and result
+        // Step 1: Collect all unique letters from the words and the result
         Set<Character> uniqueLetters = new HashSet<>();
         for (String w : words) {
             for (char c : w.toCharArray()) uniqueLetters.add(c);
@@ -21,49 +29,59 @@ public class CryptarithmSolver {
 
         letters.addAll(uniqueLetters);
 
-        // More than 10 unique letters means no solution (digits 0-9 only)
+        // Step 2: If more than 10 unique letters, no solution possible (only digits 0-9 available)
         if (letters.size() > 10) {
             System.out.println("Too many unique letters (>10), no solution possible.");
             return;
         }
 
-        // Start backtracking to assign digits to letters
+        // Step 3: Start backtracking to assign digits to letters
         if (solve(0)) {
-            printSolution();
+            printSolution(); // If a valid solution is found, print it
         } else {
             System.out.println("No solution found.");
         }
     }
 
     /**
-     * Backtracking function to assign digits to letters uniquely.
-     * Ensures no leading letter gets digit zero.
+     * Recursively assigns digits to letters using backtracking.
+     * Ensures:
+     * - Each letter gets a unique digit.
+     * - No leading letter (first character of any word/result) is assigned digit 0.
      */
     static boolean solve(int index) {
         if (index == letters.size()) {
+            // All letters have been assigned digits; check if the equation is satisfied
             return checkSolution();
         }
 
         char c = letters.get(index);
+
+        // Try all digits 0–9 for this letter
         for (int d = 0; d <= 9; d++) {
             if (!usedDigits[d]) {
-                if (d == 0 && isLeadingLetter(c)) continue;  // No leading zeros
+                // Skip leading zero assignments
+                if (d == 0 && isLeadingLetter(c)) continue;
 
+                // Assign digit and mark as used
                 usedDigits[d] = true;
                 charToDigit.put(c, d);
 
+                // Recurse to next letter
                 if (solve(index + 1)) return true;
 
-                // Backtrack
+                // Backtrack: unassign digit
                 usedDigits[d] = false;
                 charToDigit.remove(c);
             }
         }
-        return false;
+
+        return false; // No valid assignment found for this configuration
     }
 
     /**
-     * Checks if character is a leading letter of any word or the result.
+     * Returns true if the character is the leading character of any word or result.
+     * Leading letters cannot be assigned zero.
      */
     static boolean isLeadingLetter(char c) {
         for (String w : words) {
@@ -73,7 +91,8 @@ public class CryptarithmSolver {
     }
 
     /**
-     * Converts a word into a number based on current letter-digit assignments.
+     * Converts a word into a number based on the current character-to-digit mapping.
+     * For example, if STAR = 8425, returns 8425.
      */
     static int wordToNumber(String w) {
         int num = 0;
@@ -84,7 +103,8 @@ public class CryptarithmSolver {
     }
 
     /**
-     * Verifies if the sum of all words equals the result number.
+     * Checks if the current mapping satisfies the equation:
+     * Sum of words == result word
      */
     static boolean checkSolution() {
         int sum = 0;
@@ -95,10 +115,10 @@ public class CryptarithmSolver {
     }
 
     /**
-     * Prints the digit assignments and numerical values of words.
+     * Displays the solution: letter-digit mappings and converted numbers.
      */
     static void printSolution() {
-        System.out.println("Solution found:");
+        System.out.println("✅ Solution found:");
         for (Map.Entry<Character, Integer> entry : charToDigit.entrySet()) {
             System.out.println(entry.getKey() + " = " + entry.getValue());
         }
@@ -108,6 +128,7 @@ public class CryptarithmSolver {
             System.out.println(w + " = " + wordToNumber(w));
         }
         System.out.println(result + " = " + wordToNumber(result));
-        System.out.println("Check: sum of words = " + Arrays.stream(words).mapToInt(CryptarithmSolver::wordToNumber).sum());
+        System.out.println("Check: sum of words = " +
+                Arrays.stream(words).mapToInt(CryptarithmSolver::wordToNumber).sum());
     }
 }

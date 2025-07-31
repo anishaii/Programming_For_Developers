@@ -55,10 +55,10 @@ public class PatternSequenceMatcher {
 
         int t2_1 = 3;
         int result1 = maxRepetitions(p1, t1, p2, t2_1);
-        System.out.println("Result for t2 = " + t2_1 + ": " + result1);  // ✅ Expected: 3
+        System.out.println("Result for t2 = " + t2_1 + ": " + result1);  
 
         int t2_2 = 5;
         int result2 = maxRepetitions(p1, t1, p2, t2_2);
-        System.out.println("Result for t2 = " + t2_2 + ": " + result2);  // ✅ Expected: 3
+        System.out.println("Result for t2 = " + t2_2 + ": " + result2);  
     }
 }

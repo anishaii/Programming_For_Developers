@@ -8,8 +8,8 @@ public class SecureTransmission {
     /**
      * Constructor to initialize the secure transmission network.
      *
-     * @param n     Number of offices (nodes)
-     * @param links Communication links represented as [a, b, strength]
+     *  n     Number of offices (nodes)
+     *  links Communication links represented as [a, b, strength]
      *              where a and b are connected offices with the given signal strength.
      */
     public SecureTransmission(int n, int[][] links) {
@@ -39,10 +39,10 @@ public class SecureTransmission {
      *
      * Time Complexity: O(N + E), where N = number of nodes, E = number of links
      *
-     * @param sender      Source office
-     * @param receiver    Target office
-     * @param maxStrength Maximum allowable signal strength
-     * @return True if secure path exists; otherwise false
+     *  sender Source office
+     * receiver    Target office
+     * maxStrength Maximum allowable signal strength
+     * True if secure path exists; otherwise false
      */
     public boolean canTransmit(int sender, int receiver, int maxStrength) {
         Set<Integer> visited = new HashSet<>();
